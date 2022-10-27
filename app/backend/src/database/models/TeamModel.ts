@@ -22,3 +22,5 @@ Team.init({
   sequelize: db,
   timestamps: false,
 });
+
+export default Team;

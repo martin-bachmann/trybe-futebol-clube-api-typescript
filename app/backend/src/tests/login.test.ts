@@ -7,6 +7,7 @@ import * as jwt from 'jsonwebtoken';
 import { app } from '../app';
 import { Model } from 'sequelize';
 import User from '../database/models/UserModel'
+import { user } from './mocks/user.mocks';
 
 chai.use(chaiHttp)
 
@@ -43,14 +44,13 @@ describe('POST /login', () => {
       const httpResponse = await chai
         .request(app)
         .post('/login')
-        .send({ email: 'usuario@prov.com', password: '123456' })
+        .send({ email: 'wrong_email@prov.com', password: '123456' })
       
       expect(httpResponse.status).to.equal(401)
       expect(httpResponse.body).to.deep.equal({ 'message': 'Incorrect email or password' })
     })
   }) 
   describe('quando o email é encontrado mas a senha é incorreta', () => {
-    const user = { id: 1, username: 'usuario', email: 'usuario@prov.com', password: 'wrong_password'}
     beforeEach(() => {
       sinon.stub(Model, 'findOne').resolves(user as User)
       sinon.stub(bcrypt, 'compare').resolves(false)
@@ -61,14 +61,13 @@ describe('POST /login', () => {
       const httpResponse = await chai
         .request(app)
         .post('/login')
-        .send({ email: 'usuario@prov.com', password: '123456' })
+        .send({ email: 'usuario@prov.com', password: 'wrong_password' })
       
       expect(httpResponse.status).to.equal(401)
       expect(httpResponse.body).to.deep.equal({ 'message': 'Incorrect email or password' });
     })
   })
   describe('quando as credenciais estão corretas', () => {
-    const user = { id: 1, username: 'usuario', email: 'usuario@prov.com', password: '123456' }
     beforeEach(() => {
       sinon.stub(Model, 'findOne').resolves(user as User)
       sinon.stub(bcrypt, 'compare').resolves(true)
@@ -90,7 +89,6 @@ describe('POST /login', () => {
 
 describe('GET /login/validate', () => {
   describe('quando as credenciais estão corretas', () => {
-    const user = { id: 1, username: 'usuario', role: 'admin', email: 'usuario@prov.com', password: '123456' }
     beforeEach(() => {
       sinon.stub(jwt, 'verify').resolves(user as User)
       sinon.stub(Model, 'findOne').resolves(user as User)
