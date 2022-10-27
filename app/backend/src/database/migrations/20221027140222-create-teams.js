@@ -4,30 +4,18 @@ const { INTEGER, STRING } = require("sequelize");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('teams', {
       id: {
         type: INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      username: {
+      team_name: {
         type: STRING,
         allowNull: false,
-      },
-      role: {
-        type: STRING,
-        allowNull: false,
-      },
-      email: {
-        type: STRING,
-        allowNull: false,
-      },
-      password: {
-        type: STRING,
-        allowNull: false,
-      },
-    });
+      }
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
