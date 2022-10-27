@@ -22,4 +22,13 @@ export default class LoginService {
     const token = generateToken(id, email);
     return token;
   };
+
+  validateLogin = async (email: string): Promise<string> => {
+    const user = await this.model.findOne({ where: { email } });
+    if (!user) {
+      throw new UnauthorizedError('User not found');
+    }
+    const { role } = user;
+    return role;
+  };
 }
