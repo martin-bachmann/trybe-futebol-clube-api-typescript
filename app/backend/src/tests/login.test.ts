@@ -3,6 +3,7 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 import { app } from '../app';
 import { Model } from 'sequelize';
 import User from '../database/models/UserModel'
@@ -83,6 +84,29 @@ describe('POST /login', () => {
       expect(httpResponse.status).to.equal(200)
       expect(httpResponse.body).to.have.key('token')
       expect(httpResponse.body.token).to.be.a('string')
+    })
+  })
+})
+
+describe('GET /login/validate', () => {
+  describe('quando as credenciais estão corretas', () => {
+    const user = { id: 1, username: 'usuario', role: 'admin', email: 'usuario@prov.com', password: '123456' }
+    beforeEach(() => {
+      sinon.stub(Model, 'findOne').resolves(user as User)
+      sinon.stub(jwt, 'verify').resolves(user as User)
+    })
+    afterEach(() => sinon.restore())
+
+    it('deve retornar um status 200', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU0NTI3MTg5fQ.XS_9AA82iNoiVaASi0NtJpqOQ_gHSHhxrpIdigiT-fc"
+        })
+      expect(httpResponse.status).to.equal(200)
+      expect(httpResponse.body).to.have.key('role')
+      expect(httpResponse.body.token).to.be.a('admin')
     })
   })
 })
