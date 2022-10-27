@@ -1,4 +1,7 @@
+import 'express-async-errors';
 import * as express from 'express';
+import errorMiddleware from './middlewares/errorMiddleware';
+import { loginRouter } from './routes';
 
 class App {
   public app: express.Express;
@@ -22,6 +25,13 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+
+    this.routes();
+  }
+
+  private routes(): void {
+    this.app.use('/login', loginRouter);
+    this.app.use(errorMiddleware);
   }
 
   public start(PORT: string | number):void {
@@ -31,5 +41,5 @@ class App {
 
 export { App };
 
-// A execução dos testes de cobertura depende dessa exportação 
+// A execução dos testes de cobertura depende dessa exportação
 export const { app } = new App();
