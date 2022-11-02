@@ -38,4 +38,11 @@ export default class MatchService {
 
     return newMatch;
   };
+
+  updateMatchProgress = async (id: number): Promise<void> => {
+    await this.model.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+  };
 }
