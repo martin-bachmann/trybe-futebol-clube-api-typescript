@@ -101,6 +101,7 @@ describe('GET /login/validate', () => {
         .get('/login/validate')
         .send()
         .set('Authorization', 'token')
+      
       expect(httpResponse.status).to.equal(200)
       expect(httpResponse.body).to.have.key('role')
       expect(httpResponse.body.role).to.equal('admin')
