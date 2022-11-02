@@ -82,3 +82,21 @@ describe('POST /matches', () => {
     })
   })
 })
+
+describe('PATCH /matches', () => {
+  describe('em caso de sucesso', () => {
+    beforeEach(() => {
+      sinon.stub(Model, 'update').resolves()
+    })
+    afterEach(() => sinon.restore())
+
+    it('deve retornar um status 200', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .patch('/matches/1/finish')
+
+      expect(httpResponse.status).to.equal(200)
+      expect(httpResponse.body).to.deep.equal({ message: 'Finished' })
+    })
+  })
+})
