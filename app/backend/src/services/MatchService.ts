@@ -11,7 +11,17 @@ export default class MatchService {
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
       ],
     });
-    console.log(matches);
+    return matches;
+  };
+
+  getMatchesInProgress = async (): Promise<Match[]> => {
+    const matches = await this.model.findAll({
+      where: { inProgress: true },
+      include: [
+        { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
+        { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
+      ],
+    });
     return matches;
   };
 }
