@@ -22,7 +22,7 @@ const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
     req.body.user = decoded as JwtPayload;
     next();
   } catch (err) {
-    return res.status(statusCodes.unauthorized).json({ message: 'Invalid token' });
+    return res.status(statusCodes.unauthorized).json({ message: 'Token must be a valid token' });
   }
 };
 

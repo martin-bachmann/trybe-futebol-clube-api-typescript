@@ -18,4 +18,13 @@ export default class MatchController {
 
     return res.status(statusCodes.ok).json(matches);
   };
+
+  createMatch = async (req: Request, res: Response) => {
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
+
+    const match = await this.matchService
+      .createMatch(homeTeam, awayTeam, homeTeamGoals, awayTeamGoals);
+
+    return res.status(statusCodes.created).json(match);
+  };
 }

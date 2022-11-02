@@ -11,6 +11,7 @@ export default class MatchService {
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
       ],
     });
+
     return matches;
   };
 
@@ -22,6 +23,19 @@ export default class MatchService {
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
       ],
     });
+
     return matches;
+  };
+
+  createMatch = async (
+    homeTeam: number,
+    awayTeam: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<Match> => {
+    const newMatch = await this.model
+      .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
+
+    return newMatch;
   };
 }
