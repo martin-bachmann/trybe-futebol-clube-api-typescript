@@ -11,7 +11,7 @@ export default class MatchController {
     let matches;
 
     if (inProgress) {
-      matches = await this.matchService.getMatchesInProgress();
+      matches = await this.matchService.getMatchesByProgress(inProgress === 'true');
     } else {
       matches = await this.matchService.getAllMatches();
     }
