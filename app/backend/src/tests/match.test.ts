@@ -4,7 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { app } from '../app';
 import { Model } from 'sequelize';
-import { allMatchesReturn, matchesInProgressReturn } from './mocks/match.mock';
+import { allMatchesReturn, matchesInProgressReturn, matchesNotInProgressReturn } from './mocks/match.mock';
 
 chai.use(chaiHttp)
 
@@ -24,6 +24,21 @@ describe('GET /matches', () => {
 
         expect(httpResponse.status).to.equal(200)
         expect(httpResponse.body).to.deep.equal(matchesInProgressReturn)
+    })
+  })
+  describe('se estiver com a query inProgress como false', () => {
+    beforeEach(() => {
+      sinon.stub(Model, 'findAll').resolves(matchesNotInProgressReturn as any)
+    })
+    afterEach(() => sinon.restore())
+
+    it('deve retornar um status 200', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .get('/matches?inProgress=false')
+
+        expect(httpResponse.status).to.equal(200)
+        expect(httpResponse.body).to.deep.equal(matchesNotInProgressReturn)
     })
   })
   describe('em caso de sucesso', () => {
