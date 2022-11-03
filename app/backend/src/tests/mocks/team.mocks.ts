@@ -17,3 +17,8 @@ export const singleTeamReturn = {
   "id": 5,
   "teamName": "Cruzeiro"
 }
+
+export const awayTeamReturn =   {
+  "id": 2,
+  "teamName": "Bahia"
+}

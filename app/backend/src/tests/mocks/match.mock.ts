@@ -91,6 +91,13 @@ export const matchesNotInProgressReturn = [
   }
 ]
 
+export const createMatchEqualTeamsErrorInput = {
+  "homeTeam": 16,
+  "awayTeam": 16,
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2,
+}
+
 export const createMatchInput = {
   "homeTeam": 16,
   "awayTeam": 8,
