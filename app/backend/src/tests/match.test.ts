@@ -66,10 +66,6 @@ describe('GET /matches', () => {
 
 describe('POST /matches', () => {
   describe('quando o token não é valido', () => {
-    beforeEach(() => {
-      sinon.stub(jwt, 'verify').resolves(user as User)
-      sinon.stub(Model, 'findOne').resolves(undefined)
-    })
     afterEach(() => sinon.restore())
 
     it('deve retornar um status 401', async () => {
@@ -105,7 +101,7 @@ describe('POST /matches', () => {
     beforeEach(() => {
       sinon.stub(jwt, 'verify').resolves(user as User)
       sinon.stub(Model, 'findOne').resolves(user as User)
-      sinon.stub(Model, 'findOne').resolves(undefined)
+      sinon.stub(Model, 'findByPk').resolves(undefined)
     })
     afterEach(() => sinon.restore())
 
@@ -113,7 +109,7 @@ describe('POST /matches', () => {
       const httpResponse = await chai
         .request(app)
         .post('/matches')
-        .send(createMatchEqualTeamsErrorInput)
+        .send(createMatchInput)
         .set('Authorization', 'token')
 
       expect(httpResponse.status).to.equal(404)
@@ -124,8 +120,8 @@ describe('POST /matches', () => {
     beforeEach(() => {
       sinon.stub(jwt, 'verify').resolves(user as User)
       sinon.stub(Model, 'findOne').resolves(user as User)
-      sinon.stub(Model, 'findOne').resolves(singleTeamReturn as Team)
-      sinon.stub(Model, 'findOne').resolves(undefined)
+      sinon.stub(Model, 'findByPk').onFirstCall().resolves(singleTeamReturn as Team)
+        .onSecondCall().resolves(undefined)
     })
     afterEach(() => sinon.restore())
 
@@ -133,7 +129,7 @@ describe('POST /matches', () => {
       const httpResponse = await chai
         .request(app)
         .post('/matches')
-        .send(createMatchEqualTeamsErrorInput)
+        .send(createMatchInput)
         .set('Authorization', 'token')
 
       expect(httpResponse.status).to.equal(404)
@@ -144,8 +140,8 @@ describe('POST /matches', () => {
     beforeEach(() => {
       sinon.stub(jwt, 'verify').resolves(user as User)
       sinon.stub(Model, 'findOne').resolves(user as User)
-      sinon.stub(Model, 'findOne').resolves(singleTeamReturn as Team)
-      sinon.stub(Model, 'findOne').resolves(awayTeamReturn as Team)
+      sinon.stub(Model, 'findByPk').onFirstCall().resolves(singleTeamReturn as Team)
+        .onSecondCall().resolves(awayTeamReturn as Team)
       sinon.stub(Model, 'create').resolves(createMatchReturn as any)
     })
     afterEach(() => sinon.restore())

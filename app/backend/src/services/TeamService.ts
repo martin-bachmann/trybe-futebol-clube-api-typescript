@@ -13,7 +13,7 @@ export default class TeamService {
     const team = await this.model.findByPk(id);
 
     if (!team) {
-      throw new NotFoundError('Team does not exist');
+      throw new NotFoundError('There is no team with such id!');
     }
 
     return team;

@@ -1,7 +1,7 @@
-import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
-import statusCodes from '../statusCodes';
+import UnauthorizedError from '../errors/unauthorized-error';
 
 const secret: string = process.env.JWT_SECRET || 'seusecretdetoken';
 
@@ -14,15 +14,15 @@ const generateToken = (id: number, email: string): string => {
 const validateJWT = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization');
   if (!token) {
-    return res.status(statusCodes.unauthorized).json({ message: 'Token not found' });
+    throw new UnauthorizedError('Token not found');
   }
 
   try {
     const decoded = await verify(token, secret);
-    req.body.user = decoded as JwtPayload;
+    req.body = { ...req.body, user: decoded };
     next();
   } catch (err) {
-    return res.status(statusCodes.unauthorized).json({ message: 'Token must be a valid token' });
+    throw new UnauthorizedError('Token must be a valid token');
   }
 };
 

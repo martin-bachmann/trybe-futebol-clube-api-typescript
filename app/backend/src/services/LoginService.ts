@@ -26,7 +26,7 @@ export default class LoginService {
   validateLogin = async (email: string): Promise<string> => {
     const user = await this.model.findOne({ where: { email } });
     if (!user) {
-      throw new UnauthorizedError('User not found');
+      throw new UnauthorizedError('Token must be a valid token');
     }
     const { role } = user;
     return role;

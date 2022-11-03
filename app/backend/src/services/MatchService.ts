@@ -1,8 +1,10 @@
 import Team from '../database/models/TeamModel';
 import Match from '../database/models/MatchModel';
+import UnprocEntityError from '../errors/unprocEntityError';
+import TeamService from './TeamService';
 
 export default class MatchService {
-  constructor(private model = Match) { }
+  constructor(private model = Match, private teamService = new TeamService()) { }
 
   getAllMatches = async (): Promise<Match[]> => {
     const matches = await this.model.findAll({
@@ -33,6 +35,13 @@ export default class MatchService {
     homeTeamGoals: number,
     awayTeamGoals: number,
   ): Promise<Match> => {
+    if (homeTeam === awayTeam) {
+      throw new UnprocEntityError('It is not possible to create a match with two equal teams');
+    }
+
+    await this.teamService.getTeamById(homeTeam);
+    await this.teamService.getTeamById(awayTeam);
+
     const newMatch = await this.model
       .create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress: true });
 
