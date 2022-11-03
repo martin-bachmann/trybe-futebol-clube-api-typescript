@@ -54,4 +54,15 @@ export default class MatchService {
       { where: { id } },
     );
   };
+
+  updateMatchScore = async (
+    id: string,
+    homeTeamGoals: string,
+    awayTeamGoals: string,
+  ): Promise<void> => {
+    await this.model.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
+  };
 }

@@ -12,4 +12,6 @@ router.post('/', validateJWT, matchController.createMatch);
 
 router.patch('/:id/finish', matchController.updateMatchProgress);
 
+router.patch('/:id', matchController.updateMatchScore);
+
 export default router;
