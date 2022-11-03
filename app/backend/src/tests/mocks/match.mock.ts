@@ -113,3 +113,8 @@ export const createMatchReturn = {
   "awayTeamGoals": 2,
   "inProgress": true,
 }
+
+export const updateMatchInput = {
+  "homeTeamGoals": 3,
+  "awayTeamGoals": 1
+}

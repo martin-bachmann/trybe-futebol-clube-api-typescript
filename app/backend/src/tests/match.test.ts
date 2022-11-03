@@ -5,7 +5,7 @@ import chaiHttp = require('chai-http');
 import * as jwt from 'jsonwebtoken';
 import { app } from '../app';
 import { Model } from 'sequelize';
-import { allMatchesReturn, createMatchEqualTeamsErrorInput, createMatchInput, createMatchReturn, matchesInProgressReturn, matchesNotInProgressReturn } from './mocks/match.mock';
+import { allMatchesReturn, createMatchEqualTeamsErrorInput, createMatchInput, createMatchReturn, matchesInProgressReturn, matchesNotInProgressReturn, updateMatchInput } from './mocks/match.mock';
 import { user } from './mocks/user.mocks';
 import User from '../database/models/UserModel'
 import Team from '../database/models/TeamModel';
@@ -159,7 +159,7 @@ describe('POST /matches', () => {
   })
 })
 
-describe('PATCH /matches', () => {
+describe('PATCH /matches/:id/finish', () => {
   describe('em caso de sucesso', () => {
     beforeEach(() => {
       sinon.stub(Model, 'update').resolves()
@@ -173,6 +173,24 @@ describe('PATCH /matches', () => {
 
       expect(httpResponse.status).to.equal(200)
       expect(httpResponse.body).to.deep.equal({ message: 'Finished' })
+    })
+  })
+})
+
+describe('PATCH /matches/:id', () => {
+  describe('em caso de sucesso', () => {
+    beforeEach(() => {
+      sinon.stub(Model, 'update').resolves()
+    })
+    afterEach(() => sinon.restore())
+
+    it('deve retornar um status 200', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .patch('/matches/1')
+        .send(updateMatchInput)
+
+      expect(httpResponse.status).to.equal(200)
     })
   })
 })
