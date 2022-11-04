@@ -13,10 +13,12 @@ export default class Leaderboard {
 
   create = (): LeaderboardRow[] => {
     const leaderboard = this.teams.map((team) => new LeaderboardRow(team));
-    console.log(this.matches);
+
     this.matches.forEach((match) => {
-      const teamIndex = leaderboard.findIndex((team) => (team.id === match.homeTeam));
-      leaderboard[teamIndex].update(match);
+      if (!match.inProgress) {
+        const teamIndex = leaderboard.findIndex((team) => (team.id === match.homeTeam));
+        leaderboard[teamIndex].update(match);
+      }
     });
 
     leaderboard.sort((a, b) => {
