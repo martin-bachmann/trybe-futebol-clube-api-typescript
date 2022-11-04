@@ -11,16 +11,34 @@ export default class Leaderboard {
     this.matches = matches;
   }
 
-  create = (): LeaderboardRow[] => {
+  create = (place?: string): LeaderboardRow[] => {
     const leaderboard = this.teams.map((team) => new LeaderboardRow(team));
 
+    const updatedLeaderboard = this.update(leaderboard, place);
+
+    const sortedLeaderboard = this.sort(updatedLeaderboard);
+
+    return sortedLeaderboard;
+  };
+
+  update = (leaderboard: LeaderboardRow[], place?: string): LeaderboardRow[] => {
     this.matches.forEach((match) => {
       if (!match.inProgress) {
-        const teamIndex = leaderboard.findIndex((team) => (team.id === match.homeTeam));
-        leaderboard[teamIndex].update(match);
+        if (place !== 'away') {
+          const teamIndex = leaderboard.findIndex((team) => (team.id === match.homeTeam));
+          leaderboard[teamIndex].update(match, true);
+        }
+        if (place !== 'home') {
+          const teamIndex = leaderboard.findIndex((team) => (team.id === match.awayTeam));
+          leaderboard[teamIndex].update(match, false);
+        }
       }
     });
 
+    return leaderboard;
+  };
+
+  sort = (leaderboard: LeaderboardRow[]): LeaderboardRow[] => {
     leaderboard.sort((a, b) => {
       let verify = b.totalPoints - a.totalPoints;
       if (verify === 0) verify = b.totalVictories - a.totalVictories;
@@ -29,7 +47,6 @@ export default class Leaderboard {
       if (verify === 0) verify = b.goalsOwn - a.goalsOwn;
       return verify;
     });
-
     return leaderboard;
   };
 }

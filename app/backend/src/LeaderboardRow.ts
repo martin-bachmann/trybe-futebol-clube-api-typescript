@@ -28,13 +28,13 @@ export default class LeaderboardRow {
     this.efficiency = 0;
   }
 
-  update = (match: Match): void => {
+  update = (match: Match, home: boolean): void => {
     const { homeTeamGoals, awayTeamGoals } = match;
     this.totalGames += 1;
-    this.goalsFavor += homeTeamGoals;
-    this.goalsOwn += awayTeamGoals;
+    this.goalsFavor += home ? homeTeamGoals : awayTeamGoals;
+    this.goalsOwn += home ? awayTeamGoals : homeTeamGoals;
     this.goalsBalance = this.calculateGoalsBalance();
-    if (homeTeamGoals > awayTeamGoals) {
+    if ((homeTeamGoals > awayTeamGoals && home) || (homeTeamGoals < awayTeamGoals && !home)) {
       this.totalVictories += 1;
       this.totalPoints += 3;
     } else if (homeTeamGoals === awayTeamGoals) {
