@@ -1,4 +1,4 @@
-# Projeto TrybeSmith API (REST, TypeScript, MySQL, TDD)
+# Projeto Trybe Futebol Clube API (REST, TypeScript, MySQL, TDD)
 
 API para um site informativo sobre partidas e classificações de futebol, utilizando TypeScript e Sequelize para implementar diversas operações CRUD com banco de dados MySQL. No desenvolvimento, foram utilizados o Test Driven Development(TDD) e a orientação a objetos. As validações de entrada foram feitas com Joi, enquanto a autenticação por token foi feita com JWT. Projeto desenvolvido no modulo de BackEnd do curso da Trybe. O código do Front-End foi completamente produzido pela Trybe, sendo de minha autoria o Back-End (API).
 
